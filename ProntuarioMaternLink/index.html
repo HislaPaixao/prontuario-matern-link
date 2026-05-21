@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matern Link - Prontuário Médico</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="prontuario-container">
+    
+    <aside class="sidebar-esquerda">
+      <div class="sidebar-topo">
+        <div class="logo-sistema">
+          <h2>Matern Link</h2>
+          <span>Prontuário Eletrônico</span>
+        </div>
+        
+        <nav class="menu-navegacao">
+          <button class="btn-nav active">Histórico de Consulta</button>
+          <button class="btn-nav">Atendimento (Principal)</button>
+          <button class="btn-nav">Tabela de Acompanhamento</button>
+          <button class="btn-nav">Exames e Procedimentos</button>
+          <button class="btn-nav">Prescrições</button>
+        </nav>
+      </div>
+      
+      <div class="sidebar-rodape">
+        <div class="cronometro-atendimento">
+          <span>Duração: <strong>00:14:22</strong></span>
+        </div>
+        <button class="btn-finalizar" onclick="abrirModal()">Finalizar Atendimento</button>
+      </div>
+    </aside>
+
+    <main class="conteudo-principal">
+      
+      <header class="header-paciente">
+        <div class="perfil-info">
+          <div class="avatar-falso">MS</div>
+          <div>
+            <h3>Maria Silva Santos</h3>
+            <p>28 anos | Gestação: 32 semanas | CRM: 123456</p>
+          </div>
+        </div>
+        <div class="perfil-contato">
+          <p>(11) 99999-9999</p>
+          <p>maria.silva@email.com</p>
+        </div>
+        <div class="perfil-convenio">
+          <p>Convênio: <strong>Unimed Gestante</strong></p>
+          <p>1ª Consulta: 01/02/2024</p>
+        </div>
+      </header>
+
+      <div class="espaco-da-tela">
+        
+        <div class="cards-alerta-container">
+          <div class="card-clinico alerta-critico">
+            <h4>ALERTA / ALERGIAS</h4>
+            <p><strong>Alergia:</strong> Penicilina</p>
+            <p><strong>Risco:</strong> Pressão arterial elevada</p>
+          </div>
+          <div class="card-clinico">
+            <h4>Antecedentes e Hábitos</h4>
+            <p><strong>Medicamentos:</strong> Ácido Fólico, Sulfato Ferroso</p>
+            <p><strong>Histórico:</strong> Nenhuma cirurgia prévia relatada</p>
+          </div>
+        </div>
+
+        <section class="tela-historico">
+          <div class="barra-acoes-historico">
+            <div class="filtros">
+              <input type="text" class="input-filtro" placeholder="Filtrar por data ou médico...">
+            </div>
+            <div class="botoes-exportar">
+              <button class="btn-secundario" onclick="alert('Imprimindo...')">Imprimir</button>
+              <button class="btn-secundario" onclick="alert('Baixando PDF...')">Baixar PDF</button>
+            </div>
+          </div>
+
+          <div class="lista-consultas-cards">
+            <div class="card-consulta-passada">
+              <div class="cabecalho-card-consulta">
+                <span><strong>15 de Março, 2024</strong></span>
+                <span>Médico: <strong>Dr. Carlos Eduardo</strong></span>
+              </div>
+              <div class="corpo-card-consulta">
+                <label>Queixa Principal / Motivo:</label>
+                <textarea readonly>Consulta de rotina - Pressão monitorada. Paciente relata leve cansaço ao fim do dia, sem outros sintomas.</textarea>
+                <label>Conduta Clínica:</label>
+                <textarea readonly>Manter repouso relativo, aumentar a ingestão de água para 3L ao dia e retornar em 15 dias para reavaliação.</textarea>
+              </div>
+            </div>
+
+            <div class="card-consulta-passada">
+              <div class="cabecalho-card-consulta">
+                <span><strong>01 de Março, 2024</strong></span>
+                <span>Médico: <strong>Dr. Carlos Eduardo</strong></span>
+              </div>
+              <div class="corpo-card-consulta">
+                <label>Queixa Principal / Motivo:</label>
+                <textarea readonly>Ultrassom obstétrico de rotina para acompanhamento do terceiro trimestre.</textarea>
+                <label>Conduta Clínica:</label>
+                <textarea readonly>Exame laudado com sucesso. Desenvolvimento fetal adequado para 30 semanas. Batimentos cardíacos normais.</textarea>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        </div>
+    </main>
+  </div>
+
+  <div id="modal-finalizar" class="modal-overlay">
+    <div class="modal-conteudo">
+      <h3>Finalizar Atendimento</h3>
+      <p>Para concluir e selar este atendimento, selecione o método de autenticação digital corporativa:</p>
+      
+      <div class="campo-select">
+        <label for="tipo-assinatura">Assinatura Digital:</label>
+        <select id="tipo-assinatura">
+          <option value="propria">Assinatura Própria (Certificado ICP-Brasil)</option>
+          <option value="institucional">Assinatura institucional (Matern Link ID)</option>
+        </select>
+      </div>
+      
+      <div class="modal-botoes">
+        <button class="btn-cancelar" onclick="fecharModal()">Voltar</button>
+        <button class="btn-confirmar" onclick="salvarEEncerrar()">Assinar e Encerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function abrirModal() {
+      document.getElementById('modal-finalizar').classList.add('active');
+    }
+    function fecharModal() {
+      document.getElementById('modal-finalizar').classList.remove('active');
+    }
+    function salvarEEncerrar() {
+      alert("Atendimento finalizado com sucesso! Prontuário bloqueado para edições.");
+      fecharModal();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "perfil": {
+    "nome": "Maria Silva Santos",
+    "idade": 28,
+    "telefone": "(11) 99999-9999",
+    "email": "maria.silva@email.com",
+    "convenio": "Plano Unimed Gestante",
+    "dataPrimeiraConsulta": "01/02/2024"
+  },
+  "historicoConsultas": [
+    {
+      "data": "15/03/2024",
+      "medico": "Dr. Carlos Eduardo",
+      "queixaPrincipal": "Consulta de rotina - Pressão monitorada",
+      "exameFisico": "PA: 120/80 mmHg, Batimentos: 72 bpm",
+      "historiaMolestia": "Gestante relata leve cansaço ao fim do dia.",
+      "antecedentes": "Nenhum histórico de cirurgia recente.",
+      "hipoteseDiagnostico": "Gestação de 32 semanas, evolução normal.",
+      "conduta": "Manter repouso relativo e hidratação."
+    }
+  ]
+}
