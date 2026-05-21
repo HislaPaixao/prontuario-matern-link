@@ -340,3 +340,49 @@ body {
 .btn-confirmar:hover {
   background-color: #b80f2f;
 }
+.tela-atendimento {
+  background: #fff;
+  padding: 24px;
+  border-radius: 10px;
+}
+
+.tela-atendimento h2 {
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.tela-atendimento label {
+  display: block;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.tela-atendimento input,
+.tela-atendimento textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
+
+.tela-atendimento textarea {
+  min-height: 75px;
+  resize: vertical;
+}
+
+.tela-atendimento button {
+  margin-top: 18px;
+  width: 100%;
+  padding: 12px;
+  background: #d9043d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tela-atendimento button:hover {
+  background: #b80334;
+}

@@ -18,8 +18,8 @@
         </div>
         
         <nav class="menu-navegacao">
-          <button class="btn-nav active">Histórico de Consulta</button>
-          <button class="btn-nav">Atendimento (Principal)</button>
+         <button class="btn-nav active" onclick="mostrarTelaHistorico()">Histórico de Consulta</button>
+         <button class="btn-nav" onclick="mostrarTelaAtendimento()">Atendimento (Principal)</button>
           <button class="btn-nav">Tabela de Acompanhamento</button>
           <button class="btn-nav">Exames e Procedimentos</button>
           <button class="btn-nav">Prescrições</button>
@@ -108,6 +108,49 @@
             </div>
           </div>
         </section>
+
+        <section id="tela-atendimento" class="tela-atendimento" style="display: none;">
+  <h2>Nova Consulta</h2>
+  <p>Médico: <strong>Dr. Carlos Eduardo</strong></p>
+
+  <label>Data do atendimento:</label>
+  <input type="date" id="data-atendimento">
+
+  <label>Duração:</label>
+  <input type="text" value="00:14:22" readonly>
+
+  <label>Queixa principal</label>
+  <textarea placeholder="Descreva a queixa principal da paciente..."></textarea>
+
+  <label>Exame físico</label>
+  <textarea placeholder="Informe os dados do exame físico..."></textarea>
+
+  <label>História da moléstia atual</label>
+  <textarea placeholder="Descreva a história da moléstia atual..."></textarea>
+
+  <label>Histórico de antecedentes</label>
+  <textarea placeholder="Informe antecedentes clínicos, cirúrgicos e familiares..."></textarea>
+
+  <label>Peso (kg)</label>
+  <input type="number" id="peso" oninput="calcularIMC()">
+
+  <label>Altura (m)</label>
+  <input type="number" id="altura" step="0.01" oninput="calcularIMC()">
+
+  <label>IMC</label>
+  <input type="text" id="imc" readonly>
+
+  <label>Hipóteses de diagnóstico</label>
+  <textarea placeholder="Informe as hipóteses diagnósticas..."></textarea>
+
+  <label>Conduta</label>
+  <textarea placeholder="Descreva a conduta médica..."></textarea>
+
+  <label>Anexar arquivos</label>
+  <input type="file" multiple>
+
+  <button type="button" onclick="salvarConsulta()">Salvar Consulta</button>
+</section>
         
         </div>
     </main>
@@ -144,6 +187,45 @@
       alert("Atendimento finalizado com sucesso! Prontuário bloqueado para edições.");
       fecharModal();
     }
+     function mostrarTelaAtendimento() {
+  document.querySelector(".tela-historico").style.display = "none";
+  document.getElementById("tela-atendimento").style.display = "block";
+}
+
+     function mostrarTelaHistorico() {
+  document.getElementById("tela-atendimento").style.display = "none";
+  document.querySelector(".tela-historico").style.display = "block";
+}
+
+     function calcularIMC() {
+  const peso = parseFloat(document.getElementById("peso").value);
+  const altura = parseFloat(document.getElementById("altura").value);
+
+     if (peso > 0 && altura > 0) {
+    const imc = peso / (altura * altura);
+    document.getElementById("imc").value = imc.toFixed(2);
+  } else {
+    document.getElementById("imc").value = "";
+  }
+}
+
+   function salvarConsulta() {
+  alert("Consulta salva com sucesso!");
+   
+  document.querySelectorAll("#tela-atendimento input, #tela-atendimento textarea")
+    .forEach(campo => {
+      if (campo.type !== "date" && campo.type !== "file") {
+        campo.value = "";
+      }
+    });
+
+  document.getElementById("imc").value = "";
+  document.getElementById("data-atendimento").valueAsDate = new Date();
+}
+
+
+document.getElementById("data-atendimento").valueAsDate = new Date();
+
   </script>
 </body>
 </html>
