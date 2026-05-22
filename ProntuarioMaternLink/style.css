@@ -386,3 +386,304 @@ body {
 .tela-atendimento button:hover {
   background: #b80334;
 }
+
+/* TELA 3: TABELA DE ACOMPANHAMENTO */
+.tela-acompanhamento {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.gravacao-container {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 32px;
+}
+
+.gravacao-container h3 {
+  font-size: 16px;
+  color: #1a202c;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gravacao-botoes {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.btn-gravacao {
+  background: #d91238;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.btn-gravacao:hover {
+  background: #b80f2f;
+  transform: scale(1.02);
+}
+
+.btn-gravacao.parar {
+  background: #e53e3e;
+}
+
+.btn-gravacao.parar:hover {
+  background: #c53030;
+}
+
+.btn-upload {
+  background: #2c7da0;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-upload:hover {
+  background: #1f5e7a;
+}
+
+.status-gravacao {
+  font-size: 13px;
+  color: #4a5568;
+  margin-top: 12px;
+  padding: 8px;
+  background: #edf2f7;
+  border-radius: 6px;
+}
+
+.lista-registros {
+  margin-top: 24px;
+}
+
+.lista-registros h3 {
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: #1a202c;
+}
+
+.tabela-registros {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.tabela-registros th {
+  background: #f7fafc;
+  padding: 12px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a5568;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tabela-registros td {
+  padding: 12px;
+  font-size: 13px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.tabela-registros tr:hover {
+  background: #f7fafc;
+}
+
+.btn-play-audio {
+  background: none;
+  border: none;
+  color: #2c7da0;
+  cursor: pointer;
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.btn-play-audio:hover {
+  color: #1f5e7a;
+}
+
+.btn-excluir-registro {
+  background: none;
+  border: none;
+  color: #e53e3e;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-excluir-registro:hover {
+  color: #c53030;
+}
+
+/* TELA 4: EXAMES E PROCEDIMENTOS */
+.tela-exames {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.tela-exames h2 {
+  color: #1a202c;
+  margin-bottom: 24px;
+}
+
+.form-sadt {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 32px;
+}
+
+.form-sadt h3 {
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: #1a202c;
+}
+
+.linha-exame {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.linha-exame select,
+.linha-exame input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.linha-exame select {
+  flex: 0.8;
+}
+
+.linha-exame input {
+  flex: 1.2;
+}
+
+.btn-remover-linha {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  color: #e53e3e;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-remover-linha:hover {
+  background: #fed7d7;
+}
+
+.btn-adicionar-exame {
+  background: none;
+  border: 1px dashed #2c7da0;
+  color: #2c7da0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-adicionar-exame:hover {
+  background: #ebf8ff;
+}
+
+.btn-enviar-sadt {
+  background: #2c7da0;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.btn-enviar-sadt:hover {
+  background: #1f5e7a;
+}
+
+.lista-solicitacoes {
+  margin-top: 32px;
+}
+
+.lista-solicitacoes h3 {
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: #1a202c;
+}
+
+.card-solicitacao {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.card-solicitacao .cabecalho-solicitacao {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: #4a5568;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 8px;
+}
+
+.card-solicitacao .status {
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+}
+
+.card-solicitacao .status.agendado {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.card-solicitacao .status.realizado {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.lista-exames-solicitados {
+  margin-top: 8px;
+}
+
+.lista-exames-solicitados li {
+  font-size: 13px;
+  padding: 4px 0;
+  color: #1a202c;
+}

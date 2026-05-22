@@ -18,12 +18,12 @@
         </div>
         
         <nav class="menu-navegacao">
-         <button class="btn-nav active" onclick="mostrarTelaHistorico()">Histórico de Consulta</button>
-         <button class="btn-nav" onclick="mostrarTelaAtendimento()">Atendimento (Principal)</button>
-          <button class="btn-nav">Tabela de Acompanhamento</button>
-          <button class="btn-nav">Exames e Procedimentos</button>
+          <button class="btn-nav" onclick="mostrarTelaHistorico()">Histórico de Consulta</button>
+          <button class="btn-nav" onclick="mostrarTelaAtendimento()">Atendimento (Principal)</button>
+          <button class="btn-nav" onclick="mostrarTelaAcompanhamento()">Tabela de Acompanhamento</button>
+          <button class="btn-nav" onclick="mostrarTelaExames()">Exames e Procedimentos</button>
           <button class="btn-nav">Prescrições</button>
-        </nav>
+      </nav>
       </div>
       
       <div class="sidebar-rodape">
@@ -55,6 +55,171 @@
       </header>
 
       <div class="espaco-da-tela">
+    
+        <div class="cards-alerta-container">
+            <div class="card-clinico alerta-critico">
+                <h4>ALERTA / ALERGIAS</h4>
+                <p><strong>Alergia:</strong> Penicilina</p>
+                <p><strong>Risco:</strong> Pressao arterial elevada</p>
+            </div>
+            <div class="card-clinico">
+                <h4>Antecedentes e Habitos</h4>
+                <p><strong>Medicamentos:</strong> Acido Folico, Sulfato Ferroso</p>
+                <p><strong>Historico:</strong> Nenhuma cirurgia previa relatada</p>
+            </div>
+        </div>
+    
+        <section class="tela-historico">
+            <div class="barra-acoes-historico">
+                <div class="filtros">
+                    <input type="text" class="input-filtro" placeholder="Filtrar por data ou medico...">
+                </div>
+                <div class="botoes-exportar">
+                    <button class="btn-secundario" onclick="alert('Imprimindo...')">Imprimir</button>
+                    <button class="btn-secundario" onclick="alert('Baixando PDF...')">Baixar PDF</button>
+                </div>
+            </div>
+    
+            <div class="lista-consultas-cards">
+                <div class="card-consulta-passada">
+                    <div class="cabecalho-card-consulta">
+                        <span><strong>15 de Marco, 2024</strong></span>
+                        <span>Medico: <strong>Dr. Carlos Eduardo</strong></span>
+                    </div>
+                    <div class="corpo-card-consulta">
+                        <label>Queixa Principal / Motivo:</label>
+                        <textarea readonly>Consulta de rotina - Pressao monitorada. Paciente relata leve cansaço ao fim do dia, sem outros sintomas.</textarea>
+                        <label>Conduta Clinica:</label>
+                        <textarea readonly>Manter repouso relativo, aumentar a ingestao de agua para 3L ao dia e retornar em 15 dias para reavaliacao.</textarea>
+                    </div>
+                </div>
+    
+                <div class="card-consulta-passada">
+                    <div class="cabecalho-card-consulta">
+                        <span><strong>01 de Marco, 2024</strong></span>
+                        <span>Medico: <strong>Dr. Carlos Eduardo</strong></span>
+                    </div>
+                    <div class="corpo-card-consulta">
+                        <label>Queixa Principal / Motivo:</label>
+                        <textarea readonly>Ultrassom obstetrico de rotina para acompanhamento do terceiro trimestre.</textarea>
+                        <label>Conduta Clinica:</label>
+                        <textarea readonly>Exame laudado com sucesso. Desenvolvimento fetal adequado para 30 semanas. Batimentos cardiacos normais.</textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <section id="tela-atendimento" class="tela-atendimento" style="display: none;">
+            <h2>Nova Consulta</h2>
+            <p>Medico: <strong>Dr. Carlos Eduardo</strong></p>
+    
+            <label>Data do atendimento:</label>
+            <input type="date" id="data-atendimento">
+    
+            <label>Duracao:</label>
+            <input type="text" value="00:14:22" readonly>
+    
+            <label>Queixa principal</label>
+            <textarea placeholder="Descreva a queixa principal da paciente..."></textarea>
+    
+            <label>Exame fisico</label>
+            <textarea placeholder="Informe os dados do exame fisico..."></textarea>
+    
+            <label>Historia da molestia atual</label>
+            <textarea placeholder="Descreva a historia da molestia atual..."></textarea>
+    
+            <label>Historico de antecedentes</label>
+            <textarea placeholder="Informe antecedentes clinicos, cirurgicos e familiares..."></textarea>
+    
+            <label>Peso (kg)</label>
+            <input type="number" id="peso" oninput="calcularIMC()">
+    
+            <label>Altura (m)</label>
+            <input type="number" id="altura" step="0.01" oninput="calcularIMC()">
+    
+            <label>IMC</label>
+            <input type="text" id="imc" readonly>
+    
+            <label>Hipoteses de diagnostico</label>
+            <textarea placeholder="Informe as hipoteses diagnosticas..."></textarea>
+    
+            <label>Conduta</label>
+            <textarea placeholder="Descreva a conduta medica..."></textarea>
+    
+            <label>Anexar arquivos</label>
+            <input type="file" multiple>
+    
+            <button type="button" onclick="salvarConsulta()">Salvar Consulta</button>
+        </section>
+    
+        <section id="tela-acompanhamento" class="tela-acompanhamento" style="display: none;">
+            <div class="gravacao-container">
+                <h3>Gravacao de Audio do Atendimento</h3>
+                <div class="gravacao-botoes">
+                    <button class="btn-gravacao" id="btnIniciarGravacao">Iniciar Gravacao</button>
+                    <button class="btn-gravacao parar" id="btnPararGravacao" style="display: none;">Parar Gravacao</button>
+                    <button class="btn-upload" id="btnUploadExame">Upload de Exame ou Documento</button>
+                </div>
+                <div class="status-gravacao" id="statusGravacao">
+                    Pronto para gravar. Clique em Iniciar Gravacao.
+                </div>
+                <input type="file" id="inputUploadExame" accept=".pdf,.jpg,.png,.doc,.docx" style="display: none;" multiple>
+            </div>
+    
+            <div class="lista-registros">
+                <h3>Registros de Acompanhamento</h3>
+                <table class="tabela-registros" id="tabelaRegistros">
+                    <thead>
+                        <tr><th>Tipo</th><th>Nome ou Descricao</th><th>Data</th><th>Acoes</th></tr>
+                    </thead>
+                    <tbody id="corpoTabelaRegistros">
+                        <tr><td colspan="4" style="text-align: center;">Nenhum registro encontrado</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    
+        <section id="tela-exames" class="tela-exames" style="display: none;">
+            <h2>Solicitacao de Exames e Procedimentos</h2>
+            
+            <div class="form-sadt">
+                <h3>Nova Solicitacao</h3>
+                <div id="containerLinhasExames">
+                    <div class="linha-exame">
+                        <select class="tipo-exame">
+                            <option value="">Selecione o tipo</option>
+                            <option value="Ultrassom Obstetrico">Ultrassom Obstetrico</option>
+                            <option value="Ressonancia Magnetica">Ressonancia Magnetica</option>
+                            <option value="Tomografia Computadorizada">Tomografia Computadorizada</option>
+                            <option value="Mamografia">Mamografia</option>
+                            <option value="Eletrocardiograma">Eletrocardiograma</option>
+                            <option value="Ecocardiograma">Ecocardiograma</option>
+                            <option value="Exame de Sangue">Exame de Sangue</option>
+                            <option value="Urina Tipo I">Urina Tipo I</option>
+                        </select>
+                        <input type="text" class="descricao-exame" placeholder="Descricao detalhada do exame">
+                        <button class="btn-remover-linha" onclick="removerLinhaExame(this)">Remover</button>
+                    </div>
+                </div>
+                <button class="btn-adicionar-exame" onclick="adicionarLinhaExame()">Adicionar outro exame</button>
+                
+                <div style="margin-top: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Justificativa Clinica:</label>
+                    <textarea id="justificativaExames" rows="3" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px;" placeholder="Informe a justificativa para solicitacao destes exames..."></textarea>
+                </div>
+                
+                <button class="btn-enviar-sadt" onclick="enviarSolicitacaoExames()">Enviar Solicitacao</button>
+            </div>
+    
+            <div class="lista-solicitacoes">
+                <h3>Solicitacoes Realizadas</h3>
+                <div id="listaSolicitacoesContainer">
+                    <p style="color: #718096; text-align: center;">Nenhuma solicitacao realizada ainda.</p>
+                </div>
+            </div>
+        </section>
+        
+    </div>
         
         <div class="cards-alerta-container">
           <div class="card-clinico alerta-critico">
@@ -177,55 +342,373 @@
   </div>
 
   <script>
-    function abrirModal() {
-      document.getElementById('modal-finalizar').classList.add('active');
+    // ==================== CONTROLE DE TELAS ====================
+    function mostrarTelaHistorico() {
+        document.querySelector(".tela-historico").style.display = "block";
+        document.getElementById("tela-atendimento").style.display = "none";
+        document.getElementById("tela-acompanhamento").style.display = "none";
+        document.getElementById("tela-exames").style.display = "none";
+        atualizarBotaoAtivo('Histórico de Consulta');
     }
-    function fecharModal() {
-      document.getElementById('modal-finalizar').classList.remove('active');
+
+    function mostrarTelaAtendimento() {
+        document.querySelector(".tela-historico").style.display = "none";
+        document.getElementById("tela-atendimento").style.display = "block";
+        document.getElementById("tela-acompanhamento").style.display = "none";
+        document.getElementById("tela-exames").style.display = "none";
+        atualizarBotaoAtivo('Atendimento (Principal)');
     }
-    function salvarEEncerrar() {
-      alert("Atendimento finalizado com sucesso! Prontuário bloqueado para edições.");
-      fecharModal();
+
+    function mostrarTelaAcompanhamento() {
+        document.querySelector(".tela-historico").style.display = "none";
+        document.getElementById("tela-atendimento").style.display = "none";
+        document.getElementById("tela-acompanhamento").style.display = "block";
+        document.getElementById("tela-exames").style.display = "none";
+        atualizarBotaoAtivo('Tabela de Acompanhamento');
     }
-     function mostrarTelaAtendimento() {
-  document.querySelector(".tela-historico").style.display = "none";
-  document.getElementById("tela-atendimento").style.display = "block";
-}
 
-     function mostrarTelaHistorico() {
-  document.getElementById("tela-atendimento").style.display = "none";
-  document.querySelector(".tela-historico").style.display = "block";
-}
+    function mostrarTelaExames() {
+        document.querySelector(".tela-historico").style.display = "none";
+        document.getElementById("tela-atendimento").style.display = "none";
+        document.getElementById("tela-acompanhamento").style.display = "none";
+        document.getElementById("tela-exames").style.display = "block";
+        atualizarBotaoAtivo('Exames e Procedimentos');
+    }
 
-     function calcularIMC() {
-  const peso = parseFloat(document.getElementById("peso").value);
-  const altura = parseFloat(document.getElementById("altura").value);
+    function atualizarBotaoAtivo(titulo) {
+        document.querySelectorAll('.btn-nav').forEach(btn => {
+            btn.classList.remove('active');
+            if(btn.textContent === titulo) {
+                btn.classList.add('active');
+            }
+        });
+    }
 
-     if (peso > 0 && altura > 0) {
-    const imc = peso / (altura * altura);
-    document.getElementById("imc").value = imc.toFixed(2);
-  } else {
-    document.getElementById("imc").value = "";
-  }
-}
+    // ==================== TELA 3: GRAVAÇÃO E UPLOAD ====================
+    let mediaRecorder;
+    let audioChunks = [];
+    let gravacaoAtiva = false;
 
-   function salvarConsulta() {
-  alert("Consulta salva com sucesso!");
-   
-  document.querySelectorAll("#tela-atendimento input, #tela-atendimento textarea")
-    .forEach(campo => {
-      if (campo.type !== "date" && campo.type !== "file") {
-        campo.value = "";
-      }
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnIniciar = document.getElementById('btnIniciarGracao');
+        if(btnIniciar) {
+            document.getElementById('btnIniciarGravacao').addEventListener('click', iniciarGravacao);
+            document.getElementById('btnPararGravacao').addEventListener('click', pararGravacao);
+            document.getElementById('btnUploadExame').addEventListener('click', () => {
+                document.getElementById('inputUploadExame').click();
+            });
+            document.getElementById('inputUploadExame').addEventListener('change', handleUploadExame);
+        }
+        carregarRegistros();
+        carregarSolicitacoes();
     });
 
-  document.getElementById("imc").value = "";
-  document.getElementById("data-atendimento").valueAsDate = new Date();
-}
+    async function iniciarGravacao() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
 
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
 
-document.getElementById("data-atendimento").valueAsDate = new Date();
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const dataHora = new Date().toLocaleString('pt-BR');
+                
+                const novoRegistro = {
+                    id: Date.now(),
+                    tipo: 'Áudio',
+                    nome: `Gravação de atendimento - ${dataHora}`,
+                    data: dataHora,
+                    url: audioUrl,
+                    blob: audioBlob
+                };
+                
+                salvarRegistro(novoRegistro);
+                document.getElementById('statusGravacao').innerHTML = 'Gravação finalizada e salva com sucesso!';
+                document.getElementById('statusGravacao').style.background = '#d1fae5';
+                
+                stream.getTracks().forEach(track => track.stop());
+            };
 
-  </script>
+            mediaRecorder.start();
+            gravacaoAtiva = true;
+            document.getElementById('btnIniciarGravacao').style.display = 'none';
+            document.getElementById('btnPararGravacao').style.display = 'inline-flex';
+            document.getElementById('statusGravacao').innerHTML = 'Gravando... Fale agora.';
+            document.getElementById('statusGravacao').style.background = '#fee2e2';
+        } catch (err) {
+            console.error('Erro ao acessar microfone:', err);
+            document.getElementById('statusGravacao').innerHTML = 'Erro: Permissão do microfone negada ou não suportada.';
+        }
+    }
+
+    function pararGravacao() {
+        if (mediaRecorder && gravacaoAtiva) {
+            mediaRecorder.stop();
+            gravacaoAtiva = false;
+            document.getElementById('btnIniciarGravacao').style.display = 'inline-flex';
+            document.getElementById('btnPararGravacao').style.display = 'none';
+        }
+    }
+
+    function handleUploadExame(event) {
+        const files = event.target.files;
+        if (!files.length) return;
+
+        for (let file of files) {
+            const dataHora = new Date().toLocaleString('pt-BR');
+            const extensao = file.name.split('.').pop();
+            let tipoIcon = '📄';
+            if (extensao === 'pdf') tipoIcon = '📕';
+            else if (['jpg', 'jpeg', 'png'].includes(extensao)) tipoIcon = '🖼️';
+            else if (['doc', 'docx'].includes(extensao)) tipoIcon = '📝';
+            
+            const novoRegistro = {
+                id: Date.now() + Math.random(),
+                tipo: `${tipoIcon} Arquivo`,
+                nome: file.name,
+                data: dataHora,
+                file: file,
+                fileUrl: URL.createObjectURL(file)
+            };
+            salvarRegistro(novoRegistro);
+        }
+        
+        alert(`${files.length} arquivo(s) enviado(s) com sucesso!`);
+        document.getElementById('inputUploadExame').value = '';
+    }
+
+    function salvarRegistro(registro) {
+        let registros = JSON.parse(localStorage.getItem('registrosAcompanhamento') || '[]');
+        registros.unshift(registro);
+        localStorage.setItem('registrosAcompanhamento', JSON.stringify(registros));
+        carregarRegistros();
+    }
+
+    function carregarRegistros() {
+        const registros = JSON.parse(localStorage.getItem('registrosAcompanhamento') || '[]');
+        const tbody = document.getElementById('corpoTabelaRegistros');
+        
+        if (registros.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Nenhum registro encontrado</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = registros.map(reg => `
+            <tr>
+                <td>${reg.tipo}</td>
+                <td>${reg.nome}</td>
+                <td>${reg.data}</td>
+                <td>
+                    ${reg.url ? `<button class="btn-play-audio" onclick="tocarAudio(${reg.id})">▶️ Ouvir</button>` : 
+                      reg.fileUrl ? `<button class="btn-play-audio" onclick="visualizarArquivo('${reg.fileUrl}')">👁️ Visualizar</button>` : ''}
+                    <button class="btn-excluir-registro" onclick="excluirRegistro(${reg.id})">🗑️</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function tocarAudio(id) {
+        const registros = JSON.parse(localStorage.getItem('registrosAcompanhamento') || '[]');
+        const registro = registros.find(r => r.id === id);
+        if (registro && registro.url) {
+            const audio = new Audio(registro.url);
+            audio.play();
+        }
+    }
+
+    function visualizarArquivo(url) {
+        window.open(url, '_blank');
+    }
+
+    function excluirRegistro(id) {
+        if (confirm('Tem certeza que deseja excluir este registro?')) {
+            let registros = JSON.parse(localStorage.getItem('registrosAcompanhamento') || '[]');
+            registros = registros.filter(r => r.id !== id);
+            localStorage.setItem('registrosAcompanhamento', JSON.stringify(registros));
+            carregarRegistros();
+        }
+    }
+
+    // ==================== TELA 4: EXAMES ====================
+    function adicionarLinhaExame() {
+        const container = document.getElementById('containerLinhasExames');
+        const novaLinha = document.createElement('div');
+        novaLinha.className = 'linha-exame';
+        novaLinha.innerHTML = `
+            <select class="tipo-exame">
+                <option value="">Selecione o tipo</option>
+                <option value="Ultrassom Obstétrico">Ultrassom Obstétrico</option>
+                <option value="Ressonância Magnética">Ressonância Magnética</option>
+                <option value="Tomografia Computadorizada">Tomografia Computadorizada</option>
+                <option value="Mamografia">Mamografia</option>
+                <option value="Eletrocardiograma">Eletrocardiograma</option>
+                <option value="Ecocardiograma">Ecocardiograma</option>
+                <option value="Exame de Sangue">Exame de Sangue</option>
+                <option value="Urina Tipo I">Urina Tipo I</option>
+            </select>
+            <input type="text" class="descricao-exame" placeholder="Descrição detalhada do exame">
+            <button class="btn-remover-linha" onclick="removerLinhaExame(this)">✖ Remover</button>
+        `;
+        container.appendChild(novaLinha);
+    }
+
+    function removerLinhaExame(botao) {
+        const container = document.getElementById('containerLinhasExames');
+        if (container.children.length > 1) {
+            botao.closest('.linha-exame').remove();
+        } else {
+            alert('Mantenha pelo menos uma linha para solicitação.');
+        }
+    }
+
+    function enviarSolicitacaoExames() {
+        const linhas = document.querySelectorAll('#containerLinhasExames .linha-exame');
+        const exames = [];
+        
+        for (let linha of linhas) {
+            const tipoSelect = linha.querySelector('.tipo-exame');
+            const descricao = linha.querySelector('.descricao-exame');
+            
+            if (tipoSelect.value && descricao.value.trim()) {
+                exames.push({
+                    tipo: tipoSelect.value,
+                    descricao: descricao.value.trim()
+                });
+            } else if (tipoSelect.value || descricao.value.trim()) {
+                alert('Por favor, preencha completamente todos os campos dos exames (tipo e descrição).');
+                return;
+            }
+        }
+        
+        if (exames.length === 0) {
+            alert('Adicione pelo menos um exame preenchido corretamente.');
+            return;
+        }
+        
+        const justificativa = document.getElementById('justificativaExames').value;
+        if (!justificativa.trim()) {
+            alert('Por favor, informe a justificativa clínica para esta solicitação.');
+            return;
+        }
+        
+        const solicitacao = {
+            id: Date.now(),
+            data: new Date().toLocaleString('pt-BR'),
+            exames: exames,
+            justificativa: justificativa,
+            status: 'agendado'
+        };
+        
+        let solicitacoes = JSON.parse(localStorage.getItem('solicitacoesExames') || '[]');
+        solicitacoes.unshift(solicitacao);
+        localStorage.setItem('solicitacoesExames', JSON.stringify(solicitacoes));
+        
+        alert('Solicitação enviada com sucesso!');
+        
+        // Limpar formulário
+        document.getElementById('containerLinhasExames').innerHTML = `
+            <div class="linha-exame">
+                <select class="tipo-exame">
+                    <option value="">Selecione o tipo</option>
+                    <option value="Ultrassom Obstétrico">Ultrassom Obstétrico</option>
+                    <option value="Ressonância Magnética">Ressonância Magnética</option>
+                    <option value="Tomografia Computadorizada">Tomografia Computadorizada</option>
+                    <option value="Mamografia">Mamografia</option>
+                    <option value="Eletrocardiograma">Eletrocardiograma</option>
+                    <option value="Ecocardiograma">Ecocardiograma</option>
+                    <option value="Exame de Sangue">Exame de Sangue</option>
+                    <option value="Urina Tipo I">Urina Tipo I</option>
+                </select>
+                <input type="text" class="descricao-exame" placeholder="Descrição detalhada do exame">
+                <button class="btn-remover-linha" onclick="removerLinhaExame(this)">✖ Remover</button>
+            </div>
+        `;
+        document.getElementById('justificativaExames').value = '';
+        
+        carregarSolicitacoes();
+    }
+
+    function carregarSolicitacoes() {
+        const solicitacoes = JSON.parse(localStorage.getItem('solicitacoesExames') || '[]');
+        const container = document.getElementById('listaSolicitacoesContainer');
+        
+        if (solicitacoes.length === 0) {
+            container.innerHTML = '<p style="color: #718096; text-align: center;">Nenhuma solicitação realizada ainda.</p>';
+            return;
+        }
+        
+        container.innerHTML = solicitacoes.map(sol => `
+            <div class="card-solicitacao">
+                <div class="cabecalho-solicitacao">
+                    <span>📅 ${sol.data}</span>
+                    <span class="status ${sol.status}">${sol.status === 'agendado' ? '📌 Agendado' : '✅ Realizado'}</span>
+                </div>
+                <div><strong>Justificativa:</strong> ${sol.justificativa.substring(0, 100)}${sol.justificativa.length > 100 ? '...' : ''}</div>
+                <div style="margin-top: 10px;"><strong>Exames solicitados:</strong></div>
+                <ul class="lista-exames-solicitados">
+                    ${sol.exames.map(exame => `<li>🔬 ${exame.tipo}: ${exame.descricao}</li>`).join('')}
+                </ul>
+                <div style="margin-top: 10px;">
+                    <button class="btn-secundario" style="margin-right: 8px;" onclick="marcarRealizado(${sol.id})">✅ Marcar como Realizado</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function marcarRealizado(id) {
+        let solicitacoes = JSON.parse(localStorage.getItem('solicitacoesExames') || '[]');
+        const index = solicitacoes.findIndex(s => s.id === id);
+        if (index !== -1) {
+            solicitacoes[index].status = 'realizado';
+            localStorage.setItem('solicitacoesExames', JSON.stringify(solicitacoes));
+            carregarSolicitacoes();
+            alert('Status atualizado para Realizado!');
+        }
+    }
+
+    // Funções existentes do modal e outras
+    function abrirModal() {
+        document.getElementById('modal-finalizar').classList.add('active');
+    }
+    
+    function fecharModal() {
+        document.getElementById('modal-finalizar').classList.remove('active');
+    }
+    
+    function salvarEEncerrar() {
+        alert("Atendimento finalizado com sucesso! Prontuário bloqueado para edições.");
+        fecharModal();
+    }
+    
+    function calcularIMC() {
+        const peso = parseFloat(document.getElementById("peso").value);
+        const altura = parseFloat(document.getElementById("altura").value);
+        if (peso > 0 && altura > 0) {
+            const imc = peso / (altura * altura);
+            document.getElementById("imc").value = imc.toFixed(2);
+        } else {
+            document.getElementById("imc").value = "";
+        }
+    }
+    
+    function salvarConsulta() {
+        alert("Consulta salva com sucesso!");
+        document.querySelectorAll("#tela-atendimento input, #tela-atendimento textarea").forEach(campo => {
+            if (campo.type !== "date" && campo.type !== "file") {
+                campo.value = "";
+            }
+        });
+        document.getElementById("imc").value = "";
+        document.getElementById("data-atendimento").valueAsDate = new Date();
+    }
+    
+    document.getElementById("data-atendimento").valueAsDate = new Date();
+    mostrarTelaHistorico();
+</script>
 </body>
 </html>
