@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Matern Link - Segurança QR Code</title>
+  <link rel="stylesheet" href="style-acesso.css">
+</head>
+<body>
+  <div class="card-acesso">
+    <h2>Validação de Segurança</h2>
+    <p style="color: #94a3b8; font-size: 13px;">Aproxime o dispositivo ou clique no QR Code abaixo para simular a leitura física do prontuário da gestante.</p>
+
+    <div class="qr-placeholder" onclick="desbloquearProntuario()" style="cursor: pointer;">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=MaternLinkAcessoAutorizado" alt="QR Code">
+    </div>
+
+    <span style="font-size: 11px; color: #ef4444; display: block; margin-top: 10px;">
+      💡 Simulação: Clique no código QR para liberar o sistema
+    </span>
+  </div>
+
+  <script>
+    function desbloquearProntuario() {
+      alert("Acesso autorizado via QR Code! Direcionando para o prontuário da paciente...");
+      window.location.href = "prontuario.html"; // Redireciona para o arquivo de 500 linhas intocado!
+    }
+  </script>
+</body>
+</html>

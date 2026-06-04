@@ -1,0 +1,111 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-color: #0f172a;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.card-acesso {
+  background-color: #1e293b;
+  padding: 40px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  border: 1px solid rgba(217, 18, 56, 0.2);
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 24px;
+  color: #f8fafc;
+}
+
+.grupo-campo {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.grupo-campo label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #94a3b8;
+}
+
+.grupo-campo input, .grupo-campo select {
+  width: 100%;
+  padding: 12px;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+}
+
+.btn-avancar {
+  width: 100%;
+  background-color: #D91238;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.2s;
+}
+
+.btn-avancar:hover {
+  background-color: #b80f2f;
+}
+
+/* Tabela de pacientes */
+.tabela-pacientes {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.tabela-pacientes th {
+  background-color: #334155;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.tabela-pacientes td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #334155;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.tabela-pacientes tr:hover td {
+  background-color: #334155;
+  color: #D91238;
+}
+
+.qr-placeholder {
+  width: 200px;
+  height: 200px;
+  background-color: white;
+  margin: 24px auto;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.qr-placeholder img {
+  width: 100%;
+  height: 100%;
+}

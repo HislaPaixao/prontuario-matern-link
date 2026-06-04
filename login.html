@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Matern Link - Login</title>
+  <link rel="stylesheet" href="style-acesso.css">
+</head>
+<body>
+  <div class="card-acesso">
+    <h2>Identificação</h2>
+    
+    <div class="grupo-campo">
+      <label>Perfil:</label>
+      <select id="perfil">
+        <option value="medico">Médico / Profissional de Saúde</option>
+        <option value="paciente">Paciente</option>
+      </select>
+    </div>
+
+    <div class="grupo-campo">
+      <label>CRM ou E-mail:</label>
+      <input type="text" id="usuario" placeholder="Insira suas credenciais...">
+    </div>
+
+    <button class="btn-avancar" onclick="entrar()">Entrar</button>
+  </div>
+
+  <script>
+    function entrar() {
+      const perfil = document.getElementById('perfil').value;
+      const usuario = document.getElementById('usuario').value;
+
+      if (!usuario.trim()) {
+        alert("Por favor, preencha o campo de identificação.");
+        return;
+      }
+
+      if (perfil === "medico") {
+        window.location.href = "pacientes.html"; // Vai para a lista de pacientes
+      } else {
+        alert("Acesso do Paciente em desenvolvimento. Use o perfil Médico para avaliar o Prontuário.");
+      }
+    }
+  </script>
+</body>
+</html>

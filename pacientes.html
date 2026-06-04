@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Matern Link - Pacientes</title>
+  <link rel="stylesheet" href="style-acesso.css">
+</head>
+<body>
+  <div class="card-acesso" style="max-width: 600px;">
+    <h2>Seus Atendimentos do Dia</h2>
+    <p style="color: #94a3b8; font-size: 14px;">Clique sobre a paciente para iniciar a consulta segura</p>
+
+    <table class="tabela-pacientes">
+      <thead>
+        <tr>
+          <th>Nome da Gestante</th>
+          <th>Idade</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr onclick="prosseguir()">
+          <td><strong>Maria Silva Santos</strong></td>
+          <td>28 anos</td>
+          <td style="color: #34d399;">Agendada (14:00)</td>
+        </tr>
+        <tr onclick="alert('Consulta finalizada. Escolha Maria Silva Santos para o teste.')">
+          <td>Ana Oliveira Souza</td>
+          <td>24 anos</td>
+          <td style="color: #94a3b8;">Finalizada</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function prosseguir() {
+      window.location.href = "qrcode.html"; // Vai para o scanner
+    }
+  </script>
+</body>
+</html>

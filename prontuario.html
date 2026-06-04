@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matern Link - Prontuário Médico</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="prontuario-container">
+    
+    <aside class="sidebar-esquerda">
+      <div class="sidebar-topo">
+        <div class="logo-sistema">
+          <h2>Matern Link</h2>
+          <span>Prontuário Eletrônico</span>
+        </div>
+        
+        <nav class="menu-navegacao">
+          <button class="btn-nav active" onclick="mostrarTela('historico')">Histórico de Consulta</button>
+          <button class="btn-nav" onclick="mostrarTela('atendimento')">Atendimento (Principal)</button>
+          <button class="btn-nav" onclick="mostrarTela('acompanhamento')">Tabela de Acompanhamento</button>
+          <button class="btn-nav" onclick="mostrarTela('exames')">Exames e Procedimentos</button>
+        </nav>
+      </div>
+      
+      <div class="sidebar-rodape">
+        <div class="cronometro-atendimento">
+          <span>Duração: <strong id="cronometro">00:00:00</strong></span>
+        </div>
+        <button class="btn-finalizar" onclick="abrirModal()">Finalizar Atendimento</button>
+      </div>
+    </aside>
+
+    <main class="conteudo-principal">
+      
+      <header class="header-paciente">
+        <div class="perfil-info">
+          <div class="avatar-falso">MS</div>
+          <div>
+            <h3>Maria Silva Santos</h3>
+            <p>28 anos | Gestação: 32 semanas | CRM: 123456</p>
+          </div>
+        </div>
+        <div class="perfil-contato">
+          <p>(11) 99999-9999</p>
+          <p>maria.silva@email.com</p>
+        </div>
+        <div class="perfil-convenio">
+          <p>Convênio: <strong>Unimed Gestante</strong></p>
+          <p>1ª Consulta: 01/02/2024</p>
+        </div>
+      </header>
+
+      <div class="espaco-da-tela">
+    
+        <div class="cards-alerta-container">
+            <div class="card-clinico alerta-critico">
+                <h4>ALERTA / ALERGIAS</h4>
+                <p><strong>Alergia:</strong> Penicilina</p>
+                <p><strong>Risco:</strong> Pressão arterial elevada</p>
+            </div>
+            <div class="card-clinico">
+                <h4>Antecedentes e Hábitos</h4>
+                <p><strong>Medicamentos:</strong> Ácido Fólico, Sulfato Ferroso</p>
+                <p><strong>Histórico:</strong> Nenhuma cirurgia prévia relatada</p>
+            </div>
+        </div>
+    
+        <!-- TELA DE HISTÓRICO -->
+        <section id="tela-historico" class="tela-historico">
+            <div class="barra-acoes-historico">
+                <div class="filtros">
+                    <input type="text" class="input-filtro" placeholder="Filtrar por data ou médico..." onkeyup="filtrarConsultas(this.value)">
+                </div>
+                <div class="botoes-exportar">
+                    <button class="btn-secundario" onclick="imprimirHistorico()">🖨️ Imprimir</button>
+                    <button class="btn-secundario" onclick="baixarPDF()">📥 Baixar PDF</button>
+                </div>
+            </div>
+    
+            <div id="lista-consultas" class="lista-consultas-cards">
+                <div class="loading-message">Carregando histórico de consultas...</div>
+            </div>
+        </section>
+    
+        <!-- TELA DE ATENDIMENTO -->
+        <section id="tela-atendimento" class="tela-atendimento" style="display: none;">
+            <h2>Nova Consulta</h2>
+            <p>Médico: <strong>Dr. Carlos Eduardo</strong> | CRM: 123456</p>
+            <p>Paciente: <strong>Maria Silva Santos</strong></p>
+            
+            <div id="mensagem-feedback"></div>
+    
+            <form id="form-consulta" onsubmit="salvarConsulta(event)">
+                <label>Data do atendimento: *</label>
+                <input type="datetime-local" id="data-atendimento" required>
+    
+                <label>Queixa principal *</label>
+                <textarea id="queixa-principal" placeholder="Descreva a queixa principal da paciente..." required></textarea>
+    
+                <label>Exame físico</label>
+                <textarea id="exame-fisico" placeholder="Informe os dados do exame físico..."></textarea>
+    
+                <label>História da moléstia atual</label>
+                <textarea id="historia-molestia" placeholder="Descreva a história da moléstia atual..."></textarea>
+    
+                <label>Histórico de antecedentes</label>
+                <textarea id="historico-antecedentes" placeholder="Informe antecedentes clínicos, cirúrgicos e familiares..."></textarea>
+    
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                    <div>
+                        <label>Peso (kg)</label>
+                        <input type="number" id="peso" step="0.1" oninput="calcularIMC()" placeholder="Ex: 68.5">
+                    </div>
+                    <div>
+                        <label>Altura (m)</label>
+                        <input type="number" id="altura" step="0.01" oninput="calcularIMC()" placeholder="Ex: 1.65">
+                    </div>
+                    <div>
+                        <label>IMC</label>
+                        <input type="text" id="imc" readonly placeholder="Calculado autom.">
+                    </div>
+                </div>
+    
+                <label>Hipóteses de diagnóstico</label>
+                <textarea id="hipotese-diagnostica" placeholder="Informe as hipóteses diagnósticas..."></textarea>
+    
+                <label>Conduta</label>
+                <textarea id="conduta" placeholder="Descreva a conduta médica..."></textarea>
+    
+                <button type="submit">💾 Salvar Consulta</button>
+            </form>
+        </section>
+    
+        <!-- TELA DE ACOMPANHAMENTO -->
+        <section id="tela-acompanhamento" class="tela-acompanhamento" style="display: none;">
+            <div class="gravacao-container">
+                <h3>📼 Gravação de Áudio do Atendimento</h3>
+                <div class="gravacao-botoes">
+                    <button class="btn-gravacao" id="btnIniciarGravacao" onclick="iniciarGravacao()">🎤 Iniciar Gravação</button>
+                    <button class="btn-gravacao parar" id="btnPararGravacao" style="display: none;" onclick="pararGravacao()">⏹️ Parar Gravação</button>
+                    <button class="btn-upload" onclick="document.getElementById('inputUploadExame').click()">📎 Upload de Documento</button>
+                </div>
+                <div class="status-gravacao" id="statusGravacao">
+                    Pronto para gravar. Clique em "Iniciar Gravação".
+                </div>
+                <input type="file" id="inputUploadExame" accept=".pdf,.jpg,.png,.doc,.docx" style="display: none;" multiple onchange="handleUploadExame(event)">
+            </div>
+    
+            <div class="lista-registros">
+                <h3>📋 Registros de Acompanhamento</h3>
+                <table class="tabela-registros" id="tabelaRegistros">
+                    <thead>
+                        <tr><th>Tipo</th><th>Nome ou Descrição</th><th>Data</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody id="corpoTabelaRegistros">
+                        <tr><td colspan="4" style="text-align: center;">Nenhum registro encontrado</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    
+        <!-- TELA DE EXAMES -->
+        <section id="tela-exames" class="tela-exames" style="display: none;">
+            <h2>🔬 Solicitação de Exames e Procedimentos</h2>
+            
+            <div class="form-sadt">
+                <h3>Nova Solicitação</h3>
+                <div id="containerLinhasExames">
+                    <div class="linha-exame">
+                        <select class="tipo-exame">
+                            <option value="">Selecione o tipo</option>
+                            <option value="Ultrassom Obstétrico">Ultrassom Obstétrico</option>
+                            <option value="Ressonância Magnética">Ressonância Magnética</option>
+                            <option value="Tomografia Computadorizada">Tomografia Computadorizada</option>
+                            <option value="Mamografia">Mamografia</option>
+                            <option value="Eletrocardiograma">Eletrocardiograma</option>
+                            <option value="Ecocardiograma">Ecocardiograma</option>
+                            <option value="Exame de Sangue">Exame de Sangue</option>
+                            <option value="Urina Tipo I">Urina Tipo I</option>
+                        </select>
+                        <input type="text" class="descricao-exame" placeholder="Descrição detalhada do exame">
+                        <button type="button" class="btn-remover-linha" onclick="removerLinhaExame(this)">✖ Remover</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-adicionar-exame" onclick="adicionarLinhaExame()">➕ Adicionar outro exame</button>
+                
+                <div style="margin-top: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Justificativa Clínica:</label>
+                    <textarea id="justificativaExames" rows="3" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px;" placeholder="Informe a justificativa para solicitação destes exames..."></textarea>
+                </div>
+                
+                <button type="button" class="btn-enviar-sadt" onclick="enviarSolicitacaoExames()">📤 Enviar Solicitação</button>
+            </div>
+    
+            <div class="lista-solicitacoes">
+                <h3>Solicitações Realizadas</h3>
+                <div id="listaSolicitacoesContainer">
+                    <p style="color: #718096; text-align: center;">Nenhuma solicitação realizada ainda.</p>
+                </div>
+            </div>
+        </section>
+        
+      </div>
+        
+    </main>
+  </div>
+
+  <!-- MODAL DE FINALIZAÇÃO -->
+  <div id="modal-finalizar" class="modal-overlay">
+    <div class="modal-conteudo">
+      <h3>Finalizar Atendimento</h3>
+      <p>Para concluir e selar este atendimento, selecione o método de autenticação digital corporativa:</p>
+      
+      <div class="campo-select">
+        <label for="tipo-assinatura">Assinatura Digital:</label>
+        <select id="tipo-assinatura">
+          <option value="propria">Assinatura Própria (Certificado ICP-Brasil)</option>
+          <option value="institucional">Assinatura institucional (Matern Link ID)</option>
+        </select>
+      </div>
+      
+      <div class="modal-botoes">
+        <button class="btn-cancelar" onclick="fecharModal()">Voltar</button>
+        <button class="btn-confirmar" onclick="salvarEEncerrar()">Assinar e Encerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==================== CONFIGURAÇÃO ====================
+    const API_URL = 'http://localhost:3000/api';
+    const PACIENTE_ID = 1;
+    let cronometroInterval;
+    let segundos = 0;
+
+    // ==================== INICIALIZAÇÃO ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        iniciarCronometro();
+        carregarHistorico();
+        
+        // Configurar data atual no formulário
+        const agora = new Date();
+        document.getElementById('data-atendimento').value = 
+            agora.toISOString().slice(0, 16);
+    });
+
+    // ==================== CRONÔMETRO ====================
+    function iniciarCronometro() {
+        cronometroInterval = setInterval(() => {
+            segundos++;
+            const horas = Math.floor(segundos / 3600);
+            const minutos = Math.floor((segundos % 3600) / 60);
+            const segs = segundos % 60;
+            
+            document.getElementById('cronometro').textContent = 
+                `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segs).padStart(2, '0')}`;
+        }, 1000);
+    }
+
+    // ==================== NAVEGAÇÃO ====================
+    function mostrarTela(tela) {
+        const telas = {
+            'historico': document.getElementById('tela-historico'),
+            'atendimento': document.getElementById('tela-atendimento'),
+            'acompanhamento': document.getElementById('tela-acompanhamento'),
+            'exames': document.getElementById('tela-exames')
+        };
+        
+        // Esconder todas as telas
+        Object.values(telas).forEach(t => t.style.display = 'none');
+        
+        // Mostrar a tela selecionada
+        if (telas[tela]) {
+            telas[tela].style.display = 'block';
+        }
+        
+        // Atualizar botões ativos
+        document.querySelectorAll('.btn-nav').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Mapear telas para textos dos botões
+        const mapaBotoes = {
+            'historico': 'Histórico de Consulta',
+            'atendimento': 'Atendimento (Principal)',
+            'acompanhamento': 'Tabela de Acompanhamento',
+            'exames': 'Exames e Procedimentos'
+        };
+        
+        document.querySelectorAll('.btn-nav').forEach(btn => {
+            if (btn.textContent === mapaBotoes[tela]) {
+                btn.classList.add('active');
+            }
+        });
+        
+        // Recarregar dados específicos da tela
+        if (tela === 'historico') carregarHistorico();
+        if (tela === 'acompanhamento') carregarRegistros();
+        if (tela === 'exames') carregarSolicitacoes();
+    }
+
+    // ==================== API ====================
+    async function apiFetch(endpoint, options = {}) {
+        try {
+            const response = await fetch(`${API_URL}${endpoint}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                ...options
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.message || 'Erro na requisição');
+            }
+            
+            return data;
+        } catch (error) {
+            console.error('Erro na API:', error);
+            throw error;
+        }
+    }
+
+    // ==================== HISTÓRICO ====================
+    async function carregarHistorico() {
+        const container = document.getElementById('lista-consultas');
+        
+        try {
+            container.innerHTML = '<div class="loading-message">Carregando histórico de consultas...</div>';
+            
+            const response = await apiFetch(`/consultas/historico/${PACIENTE_ID}`);
+            const consultas = response.data;
+            
+            if (!consultas || consultas.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #718096;">Nenhuma consulta encontrada.</p>';
+                return;
+            }
+            
+            container.innerHTML = consultas.map(consulta => `
+                <div class="card-consulta-passada">
+                    <div class="cabecalho-card-consulta">
+                        <span>
+                            <strong>${consulta.data_formatada}</strong> às ${consulta.hora_formatada}
+                        </span>
+                        <span>Médico: <strong>${consulta.medico_nome}</strong></span>
+                    </div>
+                    <div class="corpo-card-consulta">
+                        <label>Queixa Principal / Motivo:</label>
+                        <textarea readonly>${consulta.queixa_principal || 'Não informado'}</textarea>
+                        
+                        <label>Exame Físico:</label>
+                        <textarea readonly>${consulta.exame_fisico || 'Não informado'}</textarea>
+                        
+                        <label>Conduta Clínica:</label>
+                        <textarea readonly>${consulta.conduta || 'Não informado'}</textarea>
+                    </div>
+                </div>
+            `).join('');
+            
+        } catch (error) {
+            container.innerHTML = `
+                <div class="error-message">
+                    ❌ Erro ao carregar histórico: ${error.message}
+                    <br><small>Verifique se o servidor está rodando em ${API_URL}</small>
+                </div>
+            `;
+        }
+    }
+
+    function filtrarConsultas(filtro) {
+        const cards = document.querySelectorAll('.card-consulta-passada');
+        const termo = filtro.toLowerCase();
+        
+        cards.forEach(card => {
+            const texto = card.textContent.toLowerCase();
+            card.style.display = texto.includes(termo) ? 'block' : 'none';
+        });
+    }
+
+    function imprimirHistorico() {
+        window.print();
+    }
+
+    function baixarPDF() {
+        alert('Funcionalidade de download PDF será implementada em breve!');
+    }
+
+    // ==================== ATENDIMENTO ====================
+    async function salvarConsulta(event) {
+        event.preventDefault();
+        
+        const mensagemDiv = document.getElementById('mensagem-feedback');
+        
+        // Validar campos obrigatórios
+        const queixaPrincipal = document.getElementById('queixa-principal').value.trim();
+        const dataAtendimento = document.getElementById('data-atendimento').value;
+        
+        if (!queixaPrincipal) {
+            mensagemDiv.innerHTML = '<div class="feedback erro">❌ Queixa principal é obrigatória!</div>';
+            return;
+        }
+        
+        if (!dataAtendimento) {
+            mensagemDiv.innerHTML = '<div class="feedback erro">❌ Data do atendimento é obrigatória!</div>';
+            return;
+        }
+        
+        // Preparar dados
+        const consultaData = {
+            data_consulta: dataAtendimento,
+            queixa_principal: queixaPrincipal,
+            exame_fisico: document.getElementById('exame-fisico').value.trim() || null,
+            historia_molestia: document.getElementById('historia-molestia').value.trim() || null,
+            historico_antecedentes: document.getElementById('historico-antecedentes').value.trim() || null,
+            peso: parseFloat(document.getElementById('peso').value) || null,
+            altura: parseFloat(document.getElementById('altura').value) || null,
+            imc: parseFloat(document.getElementById('imc').value) || null,
+            hipotese_diagnostica: document.getElementById('hipotese-diagnostica').value.trim() || null,
+            conduta: document.getElementById('conduta').value.trim() || null
+        };
+        
+        try {
+            mensagemDiv.innerHTML = '<div class="loading-message">Salvando consulta...</div>';
+            
+            const response = await apiFetch('/consultas', {
+                method: 'POST',
+                body: JSON.stringify(consultaData)
+            });
+            
+            mensagemDiv.innerHTML = `<div class="feedback sucesso">✅ ${response.message}</div>`;
+            
+            // Limpar formulário
+            document.getElementById('form-consulta').reset();
+            document.getElementById('imc').value = '';
+            
+            // Atualizar data para agora
+            const agora = new Date();
+            document.getElementById('data-atendimento').value = 
+                agora.toISOString().slice(0, 16);
+            
+            // Recarregar histórico após 2 segundos e voltar para ele
+            setTimeout(() => {
+                mensagemDiv.innerHTML = '';
+                mostrarTela('historico');
+            }, 2000);
+            
+        } catch (error) {
+            mensagemDiv.innerHTML = `
+                <div class="feedback erro">
+                    ❌ Erro ao salvar consulta: ${error.message}
+                    <br><small>Verifique se o servidor backend está rodando!</small>
+                </div>
+            `;
+        }
+    }
+
+    function calcularIMC() {
+        const peso = parseFloat(document.getElementById('peso').value);
+        const altura = parseFloat(document.getElementById('altura').value);
+        
+        if (peso > 0 && altura > 0) {
+            const imc = peso / (altura * altura);
+            document.getElementById('imc').value = imc.toFixed(2);
+        } else {
+            document.getElementById('imc').value = '';
+        }
+    }
+
+    // ==================== ACOMPANHAMENTO ====================
+    let mediaRecorder;
+    let audioChunks = [];
+    let gravacaoAtiva = false;
+
+    async function iniciarGravacao() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const dataHora = new Date().toLocaleString('pt-BR');
+                
+                const novoRegistro = {
+                    id: Date.now(),
+                    tipo: 'Áudio',
+                    nome: `Gravação de atendimento - ${dataHora}`,
+                    data: dataHora,
+                    url: audioUrl,
+                    blob: audioBlob
+                };
+                
+                salvarRegistroLocal(novoRegistro);
+                document.getElementById('statusGravacao').innerHTML = '✅ Gravação finalizada e salva com sucesso!';
+                document.getElementById('statusGravacao').style.background = '#d1fae5';
+                
+                stream.getTracks().forEach(track => track.stop());
+            };
+
+            mediaRecorder.start();
+            gravacaoAtiva = true;
+            document.getElementById('btnIniciarGravacao').style.display = 'none';
+            document.getElementById('btnPararGravacao').style.display = 'inline-flex';
+            document.getElementById('statusGravacao').innerHTML = '🔴 Gravando... Fale agora.';
+            document.getElementById('statusGravacao').style.background = '#fee2e2';
+        } catch (err) {
+            console.error('Erro ao acessar microfone:', err);
+            document.getElementById('statusGravacao').innerHTML = '❌ Erro: Permissão do microfone negada ou não suportada.';
+        }
+    }
+
+    function pararGravacao() {
+        if (mediaRecorder && gravacaoAtiva) {
+            mediaRecorder.stop();
+            gravacaoAtiva = false;
+            document.getElementById('btnIniciarGravacao').style.display = 'inline-flex';
+            document.getElementById('btnPararGravacao').style.display = 'none';
+        }
+    }
+
+    function handleUploadExame(event) {
+        const files = event.target.files;
+        if (!files.length) return;
+
+        for (let file of files) {
+            const dataHora = new Date().toLocaleString('pt-BR');
+            const extensao = file.name.split('.').pop();
+            let tipoIcon = '📄';
+            if (extensao === 'pdf') tipoIcon = '📕';
+            else if (['jpg', 'jpeg', 'png'].includes(extensao)) tipoIcon = '🖼️';
+            else if (['doc', 'docx'].includes(extensao)) tipoIcon = '📝';
+            
+            const novoRegistro = {
+                id: Date.now() + Math.random(),
+                tipo: `${tipoIcon} Arquivo`,
+                nome: file.name,
+                data: dataHora,
+                file: file,
+                fileUrl: URL.createObjectURL(file)
+            };
+            salvarRegistroLocal(novoRegistro);
+        }
+        
+        alert(`${files.length} arquivo(s) enviado(s) com sucesso!`);
+        document.getElementById('inputUploadExame').value = '';
+    }
+
+    function salvarRegistroLocal(registro) {
+        let registros = JSON.parse(localStorage.getItem('registrosAcompanhamento') || '[]');
+        registros.unshift(registro);
+        localStorage.setItem('registrosAcompanhamento', JSON.stringify(registros));
+        carregarRegistros();
+    }
+
+    function carregarRegistros() {
+        const registros = JSON.parse(localStorage.getItem('registrosAcompanhamento') || '[]');
+        const tbody = document.getElementById('corpoTabelaRegistros');
+        
+        if (registros.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Nenhum registro encontrado</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = registros.map(reg => `
+            <tr>
+                <td>${reg.tipo}</td>
+                <td>${reg.nome}</td>
+                <td>${reg.data}</td>
+                <td>
+                    ${reg.url ? `<button class="btn-play-audio" onclick="tocarAudio('${reg.url}')">▶️ Ouvir</button>` : 
+                      reg.fileUrl ? `<button class="btn-play-audio" onclick="visualizarArquivo('${reg.fileUrl}')">👁️ Visualizar</button>` : ''}
+                    <button class="btn-excluir-registro" onclick="excluirRegistro(${reg.id})">🗑️</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function tocarAudio(url) {
+        const audio = new Audio(url);
+        audio.play();
+    }
+
+    function visualizarArquivo(url) {
+        window.open(url, '_blank');
+    }
+
+    function excluirRegistro(id) {
+        if (confirm('Tem certeza que deseja excluir este registro?')) {
+            let registros = JSON.parse(localStorage.getItem('registrosAcompanhamento') || '[]');
+            registros = registros.filter(r => r.id !== id);
+            localStorage.setItem('registrosAcompanhamento', JSON.stringify(registros));
+            carregarRegistros();
+        }
+    }
+
+    // ==================== EXAMES ====================
+    function adicionarLinhaExame() {
+        const container = document.getElementById('containerLinhasExames');
+        const novaLinha = document.createElement('div');
+        novaLinha.className = 'linha-exame';
+        novaLinha.innerHTML = `
+            <select class="tipo-exame">
+                <option value="">Selecione o tipo</option>
+                <option value="Ultrassom Obstétrico">Ultrassom Obstétrico</option>
+                <option value="Ressonância Magnética">Ressonância Magnética</option>
+                <option value="Tomografia Computadorizada">Tomografia Computadorizada</option>
+                <option value="Mamografia">Mamografia</option>
+                <option value="Eletrocardiograma">Eletrocardiograma</option>
+                <option value="Ecocardiograma">Ecocardiograma</option>
+                <option value="Exame de Sangue">Exame de Sangue</option>
+                <option value="Urina Tipo I">Urina Tipo I</option>
+            </select>
+            <input type="text" class="descricao-exame" placeholder="Descrição detalhada do exame">
+            <button type="button" class="btn-remover-linha" onclick="removerLinhaExame(this)">✖ Remover</button>
+        `;
+        container.appendChild(novaLinha);
+    }
+
+    function removerLinhaExame(botao) {
+        const container = document.getElementById('containerLinhasExames');
+        if (container.children.length > 1) {
+            botao.closest('.linha-exame').remove();
+        } else {
+            alert('Mantenha pelo menos uma linha para solicitação.');
+        }
+    }
+
+    function enviarSolicitacaoExames() {
+        const linhas = document.querySelectorAll('#containerLinhasExames .linha-exame');
+        const exames = [];
+        
+        for (let linha of linhas) {
+            const tipoSelect = linha.querySelector('.tipo-exame');
+            const descricao = linha.querySelector('.descricao-exame');
+            
+            if (tipoSelect.value && descricao.value.trim()) {
+                exames.push({
+                    tipo: tipoSelect.value,
+                    descricao: descricao.value.trim()
+                });
+            } else if (tipoSelect.value || descricao.value.trim()) {
+                alert('Por favor, preencha completamente todos os campos dos exames (tipo e descrição).');
+                return;
+            }
+        }
+        
+        if (exames.length === 0) {
+            alert('Adicione pelo menos um exame preenchido corretamente.');
+            return;
+        }
+        
+        const justificativa = document.getElementById('justificativaExames').value;
+        if (!justificativa.trim()) {
+            alert('Por favor, informe a justificativa clínica para esta solicitação.');
+            return;
+        }
+        
+        const solicitacao = {
+            id: Date.now(),
+            data: new Date().toLocaleString('pt-BR'),
+            exames: exames,
+            justificativa: justificativa,
+            status: 'agendado'
+        };
+        
+        let solicitacoes = JSON.parse(localStorage.getItem('solicitacoesExames') || '[]');
+        solicitacoes.unshift(solicitacao);
+        localStorage.setItem('solicitacoesExames', JSON.stringify(solicitacoes));
+        
+        alert('Solicitação enviada com sucesso!');
+        
+        // Limpar formulário
+        document.getElementById('containerLinhasExames').innerHTML = `
+            <div class="linha-exame">
+                <select class="tipo-exame">
+                    <option value="">Selecione o tipo</option>
+                    <option value="Ultrassom Obstétrico">Ultrassom Obstétrico</option>
+                    <option value="Ressonância Magnética">Ressonância Magnética</option>
+                    <option value="Tomografia Computadorizada">Tomografia Computadorizada</option>
+                    <option value="Mamografia">Mamografia</option>
+                    <option value="Eletrocardiograma">Eletrocardiograma</option>
+                    <option value="Ecocardiograma">Ecocardiograma</option>
+                    <option value="Exame de Sangue">Exame de Sangue</option>
+                    <option value="Urina Tipo I">Urina Tipo I</option>
+                </select>
+                <input type="text" class="descricao-exame" placeholder="Descrição detalhada do exame">
+                <button type="button" class="btn-remover-linha" onclick="removerLinhaExame(this)">✖ Remover</button>
+            </div>
+        `;
+        document.getElementById('justificativaExames').value = '';
+        
+        carregarSolicitacoes();
+    }
+
+    function carregarSolicitacoes() {
+        const solicitacoes = JSON.parse(localStorage.getItem('solicitacoesExames') || '[]');
+        const container = document.getElementById('listaSolicitacoesContainer');
+        
+        if (solicitacoes.length === 0) {
+            container.innerHTML = '<p style="color: #718096; text-align: center;">Nenhuma solicitação realizada ainda.</p>';
+            return;
+        }
+        
+        container.innerHTML = solicitacoes.map(sol => `
+            <div class="card-solicitacao">
+                <div class="cabecalho-solicitacao">
+                    <span>📅 ${sol.data}</span>
+                    <span class="status ${sol.status}">${sol.status === 'agendado' ? '📌 Agendado' : '✅ Realizado'}</span>
+                </div>
+                <div><strong>Justificativa:</strong> ${sol.justificativa.substring(0, 100)}${sol.justificativa.length > 100 ? '...' : ''}</div>
+                <div style="margin-top: 10px;"><strong>Exames solicitados:</strong></div>
+                <ul class="lista-exames-solicitados">
+                    ${sol.exames.map(exame => `<li>🔬 ${exame.tipo}: ${exame.descricao}</li>`).join('')}
+                </ul>
+                <div style="margin-top: 10px;">
+                    <button class="btn-secundario" style="margin-right: 8px;" onclick="marcarRealizado(${sol.id})">✅ Marcar como Realizado</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function marcarRealizado(id) {
+        let solicitacoes = JSON.parse(localStorage.getItem('solicitacoesExames') || '[]');
+        const index = solicitacoes.findIndex(s => s.id === id);
+        if (index !== -1) {
+            solicitacoes[index].status = 'realizado';
+            localStorage.setItem('solicitacoesExames', JSON.stringify(solicitacoes));
+            carregarSolicitacoes();
+            alert('Status atualizado para Realizado!');
+        }
+    }
+
+    // ==================== MODAL ====================
+    function abrirModal() {
+        document.getElementById('modal-finalizar').classList.add('active');
+    }
+    
+    function fecharModal() {
+        document.getElementById('modal-finalizar').classList.remove('active');
+    }
+    
+    function salvarEEncerrar() {
+        clearInterval(cronometroInterval);
+        alert("✅ Atendimento finalizado com sucesso! Prontuário bloqueado para edições.");
+        fecharModal();
+    }
+  </script>
+</body>
+</html>
