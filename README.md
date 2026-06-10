@@ -15,4 +15,10 @@ Projeto de implementação de um prontuário médico para e empresa Matern Link 
 - cd backend 
 - npm install
 - npm start
-- qunado finalizado acessar a pagina [login.html](http://localhost:3000/login.html) <- copiar no navegador
+# Quanddo finalizado acessar a pagina
+ [login.html](http://localhost:3000/login.html) 
+
+# Medicos de teste:
+- CRM: 123456 | Email: carlos.eduardo@maternlink.com
+- CRM: 789012 | Email: ana.paula@maternlink.com
+- CRM: 345678 | Email: ricardo.mendes@maternlink.com
