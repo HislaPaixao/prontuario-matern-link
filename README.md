@@ -15,7 +15,7 @@ Projeto de implementação de um prontuário médico para e empresa Matern Link 
 - cd backend 
 - npm install
 - npm start
-# Quanddo finalizado acessar a pagina
+# Quando finalizado acessar a pagina
  [login.html](http://localhost:3000/login.html) 
 
 # Medicos de teste:

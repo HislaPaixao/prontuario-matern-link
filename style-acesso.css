@@ -11,8 +11,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
+  padding: 20px;
 }
 
 .card-acesso {
@@ -23,12 +24,22 @@ body {
   max-width: 450px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.4);
   border: 1px solid rgba(217, 18, 56, 0.2);
-  text-align: center;
+}
+
+.card-acesso.pacientes {
+  max-width: 900px;
 }
 
 h2 {
-  margin-bottom: 24px;
+  margin-bottom: 8px;
   color: #f8fafc;
+  font-size: 22px;
+}
+
+p {
+  color: #94a3b8;
+  font-size: 14px;
+  margin-bottom: 24px;
 }
 
 .grupo-campo {
@@ -43,7 +54,8 @@ h2 {
   color: #94a3b8;
 }
 
-.grupo-campo input, .grupo-campo select {
+.grupo-campo input,
+.grupo-campo select {
   width: 100%;
   padding: 12px;
   background-color: #0f172a;
@@ -51,6 +63,25 @@ h2 {
   border-radius: 6px;
   color: white;
   font-size: 14px;
+}
+
+.grupo-campo input:focus,
+.grupo-campo select:focus {
+  outline: none;
+  border-color: #D91238;
+}
+
+.grupo-campo input::placeholder {
+  color: #64748b;
+}
+
+.grupo-campo select {
+  cursor: pointer;
+}
+
+.grupo-campo select option {
+  background-color: #1e293b;
+  color: white;
 }
 
 .btn-avancar {
@@ -64,36 +95,223 @@ h2 {
   cursor: pointer;
   font-size: 15px;
   transition: background 0.2s;
+  margin-top: 8px;
 }
 
 .btn-avancar:hover {
   background-color: #b80f2f;
 }
 
-/* Tabela de pacientes */
+.btn-avancar:disabled {
+  background-color: #475569;
+  cursor: not-allowed;
+}
+
+.mensagem {
+  display: none;
+  padding: 12px;
+  margin: 16px 0;
+  border-radius: 6px;
+  font-size: 13px;
+  text-align: left;
+}
+
+.mensagem.erro {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  display: block;
+}
+
+.mensagem.sucesso {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  display: block;
+}
+
+.creditos {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.8;
+}
+
+.creditos strong {
+  color: #94a3b8;
+}
+
+.header-medico {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #334155;
+}
+
+.header-medico h2 {
+  margin-bottom: 4px;
+}
+
+.medico-info {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.medico-nome {
+  font-weight: 600;
+  color: #D91238;
+}
+
+.btn-sair {
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid #475569;
+  color: #94a3b8;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.btn-sair:hover {
+  background: #334155;
+  color: white;
+}
+
+.estatisticas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #0f172a;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #334155;
+}
+
+.stat-numero {
+  font-size: 32px;
+  font-weight: bold;
+  color: #D91238;
+  display: block;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 6px;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.barra-busca {
+  margin-bottom: 20px;
+}
+
+.input-busca {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+}
+
+.input-busca:focus {
+  outline: none;
+  border-color: #D91238;
+}
+
+.input-busca::placeholder {
+  color: #64748b;
+}
+
 .tabela-pacientes {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 8px;
 }
 
 .tabela-pacientes th {
-  background-color: #334155;
-  padding: 12px;
+  background-color: #0f172a;
+  padding: 12px 6px;
   text-align: left;
-  font-size: 14px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #334155;
 }
 
 .tabela-pacientes td {
-  padding: 14px 12px;
-  border-bottom: 1px solid #334155;
-  font-size: 14px;
+  padding: 12px 6px;
+  border-bottom: 1px solid #1e293b;
+  font-size: 12px;
   cursor: pointer;
+  transition: background 0.2s;
 }
 
-.tabela-pacientes tr:hover td {
-  background-color: #334155;
+.tabela-pacientes tbody tr:hover td {
+  background-color: #0f172a;
+}
+
+.paciente-nome {
+  font-weight: 600;
+  color: #f8fafc;
+  display: block;
+  font-size: 13px;
+}
+
+.paciente-detalhes {
+  font-size: 10px;
+  color: #64748b;
+  display: block;
+  margin-top: 2px;
+}
+
+.semana-badge {
+  background: rgba(217, 18, 56, 0.15);
   color: #D91238;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  display: inline-block;
+  margin-left: 2px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-agendado {
+  background: rgba(250, 204, 21, 0.15);
+  color: #facc15;
+}
+
+.status-finalizado {
+  background: rgba(100, 116, 139, 0.15);
+  color: #64748b;
+}
+
+.status-em_andamento {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
 }
 
 .qr-placeholder {
@@ -103,9 +321,56 @@ h2 {
   margin: 24px auto;
   padding: 10px;
   border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.qr-placeholder:hover {
+  transform: scale(1.05);
 }
 
 .qr-placeholder img {
   width: 100%;
   height: 100%;
+}
+
+.mensagem-vazia {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .card-acesso {
+    padding: 24px;
+  }
+  
+  .card-acesso.pacientes {
+    padding: 24px;
+  }
+  
+  .estatisticas {
+    grid-template-columns: 1fr;
+  }
+  
+  .tabela-pacientes th:nth-child(3),
+  .tabela-pacientes td:nth-child(3),
+  .tabela-pacientes th:nth-child(4),
+  .tabela-pacientes td:nth-child(4) {
+    display: none;
+  }
+  
+  .header-medico {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
 }

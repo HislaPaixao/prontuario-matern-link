@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <title>Matern Link - Pacientes</title>
   <link rel="stylesheet" href="style-acesso.css">
 </head>
+
 <body>
   <div class="card-acesso">
-    
+
     <div class="header-medico">
       <div>
         <h2>Pacientes</h2>
@@ -37,13 +39,8 @@
     </div>
 
     <div class="barra-busca">
-      <input 
-        type="text" 
-        class="input-busca" 
-        id="buscaPaciente" 
-        placeholder="Buscar paciente por nome..."
-        onkeyup="buscarPacientes()"
-      >
+      <input type="text" class="input-busca" id="buscaPaciente" placeholder="Buscar paciente por nome..."
+        onkeyup="buscarPacientes()">
     </div>
 
     <div id="listaPacientes">
@@ -57,10 +54,10 @@
     let medicoLogado = null;
 
     // Inicializacao
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       // Recuperar dados do medico logado
       const medicoData = sessionStorage.getItem('medico');
-      
+
       if (!medicoData) {
         // Se nao tiver medico na sessao, volta para o login
         window.location.href = 'login.html';
@@ -68,7 +65,7 @@
       }
 
       medicoLogado = JSON.parse(medicoData);
-      
+
       // Atualizar interface
       document.getElementById('medicoNome').textContent = medicoLogado.nome;
       document.getElementById('dataAtual').textContent = new Date().toLocaleDateString('pt-BR', {
@@ -77,7 +74,7 @@
         month: 'long',
         year: 'numeric'
       });
-      
+
       // Carregar dados
       carregarEstatisticas();
       carregarPacientes();
@@ -88,7 +85,7 @@
       try {
         const response = await fetch(API_URL + '/pacientes/estatisticas?medico_id=' + medicoLogado.id);
         const data = await response.json();
-        
+
         if (data.success) {
           document.getElementById('totalPacientes').textContent = data.data.total_pacientes;
           document.getElementById('consultasHoje').textContent = data.data.consultas_hoje;
@@ -102,30 +99,30 @@
     // Carregar lista de pacientes
     async function carregarPacientes(busca) {
       const container = document.getElementById('listaPacientes');
-      
+
       try {
         container.innerHTML = '<div class="loading"></div>';
-        
+
         let url = API_URL + '/pacientes?medico_id=' + medicoLogado.id;
         if (busca) {
           url += '&busca=' + encodeURIComponent(busca);
         }
-        
+
         const response = await fetch(url);
         const data = await response.json();
-        
+
         if (!data.success) {
           container.innerHTML = '<div class="mensagem-vazia">Erro ao carregar pacientes.</div>';
           return;
         }
-        
+
         const pacientes = data.data;
-        
+
         if (pacientes.length === 0) {
           container.innerHTML = '<div class="mensagem-vazia">Nenhum paciente encontrado.</div>';
           return;
         }
-        
+
         // Montar tabela
         let html = `
           <table class="tabela-pacientes">
@@ -140,18 +137,18 @@
             </thead>
             <tbody>
         `;
-        
+
         pacientes.forEach(paciente => {
-          const statusClass = paciente.ultima_consulta && 
-            new Date(paciente.ultima_consulta).toDateString() === new Date().toDateString() 
-            ? 'status-agendado' 
+          const statusClass = paciente.ultima_consulta &&
+            new Date(paciente.ultima_consulta).toDateString() === new Date().toDateString()
+            ? 'status-agendado'
             : 'status-finalizado';
-          
-          const statusTexto = paciente.ultima_consulta && 
-            new Date(paciente.ultima_consulta).toDateString() === new Date().toDateString() 
-            ? 'Hoje' 
+
+          const statusTexto = paciente.ultima_consulta &&
+            new Date(paciente.ultima_consulta).toDateString() === new Date().toDateString()
+            ? 'Hoje'
             : 'Aguardando';
-          
+
           html += `
             <tr onclick="selecionarPaciente(${paciente.id}, '${paciente.nome.replace(/'/g, "\\'")}')">
               <td>
@@ -172,10 +169,10 @@
             </tr>
           `;
         });
-        
+
         html += '</tbody></table>';
         container.innerHTML = html;
-        
+
       } catch (error) {
         console.error('Erro ao carregar pacientes:', error);
         container.innerHTML = '<div class="mensagem-vazia">Erro de conexao com o servidor.</div>';
@@ -193,9 +190,9 @@
       // Salvar paciente selecionado na sessao
       sessionStorage.setItem('paciente_id', pacienteId);
       sessionStorage.setItem('paciente_nome', pacienteNome);
-      
-      // Redirecionar para o prontuario
-      window.location.href = 'index.html?paciente_id=' + pacienteId;
+
+      // Redirecionar para o QR Code primeiro
+      window.location.href = 'qrcode.html?paciente_id=' + pacienteId;
     }
 
     // Sair do sistema
@@ -207,9 +204,10 @@
     }
 
     // Atualizar a cada 30 segundos
-    setInterval(function() {
+    setInterval(function () {
       carregarEstatisticas();
     }, 30000);
   </script>
 </body>
+
 </html>
