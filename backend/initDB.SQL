@@ -144,15 +144,6 @@ CREATE TABLE IF NOT EXISTS alergias (
     INDEX idx_alergia_paciente (paciente_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Inserir alergias
-INSERT INTO alergias (paciente_id, substancia, gravidade) VALUES
-(1, 'Penicilina', 'severa'),
-(2, 'Dipirona', 'moderada'),
-(3, 'Iodo', 'leve'),
-(4, 'Latex', 'severa');
-
--- Verificar se criou
-SELECT * FROM alergias;
 
 -- ============================================
 -- INSERIR DADOS DE EXEMPLO
