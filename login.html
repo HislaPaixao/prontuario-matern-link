@@ -7,12 +7,12 @@
 </head>
 <body>
   <div class="card-acesso">
-    <h2>Identificação</h2>
+    <h2>Identificacao</h2>
     
     <div class="grupo-campo">
       <label>Perfil:</label>
       <select id="perfil">
-        <option value="medico">Médico / Profissional de Saúde</option>
+        <option value="medico">Medico / Profissional de Saude</option>
         <option value="paciente">Paciente</option>
       </select>
     </div>
@@ -22,25 +22,102 @@
       <input type="text" id="usuario" placeholder="Insira suas credenciais...">
     </div>
 
+    <div id="mensagem" style="display: none; padding: 10px; margin: 10px 0; border-radius: 5px;"></div>
+
     <button class="btn-avancar" onclick="entrar()">Entrar</button>
+    <p style="text-align: center; margin-top: 15px; font-size: 12px; color: #718096;">
+      Medicos de teste:<br>
+      CRM: 123456 | Email: carlos.eduardo@maternlink.com<br>
+      CRM: 789012 | Email: ana.paula@maternlink.com<br>
+      CRM: 345678 | Email: ricardo.mendes@maternlink.com
+    </p>
   </div>
 
   <script>
-    function entrar() {
-      const perfil = document.getElementById('perfil').value;
-      const usuario = document.getElementById('usuario').value;
+    const API_URL = 'http://localhost:3000/api';
 
-      if (!usuario.trim()) {
-        alert("Por favor, preencha o campo de identificação.");
+    async function entrar() {
+      const perfil = document.getElementById('perfil').value;
+      const usuario = document.getElementById('usuario').value.trim();
+      const mensagemDiv = document.getElementById('mensagem');
+
+      if (!usuario) {
+        mostrarMensagem('Por favor, preencha o campo de identificacao.', 'erro');
         return;
       }
 
-      if (perfil === "medico") {
-        window.location.href = "pacientes.html"; // Vai para a lista de pacientes
-      } else {
-        alert("Acesso do Paciente em desenvolvimento. Use o perfil Médico para avaliar o Prontuário.");
+      // Desabilitar botao
+      const botao = document.querySelector('.btn-avancar');
+      botao.disabled = true;
+      botao.textContent = 'Entrando...';
+
+      try {
+        const endpoint = perfil === 'medico' ? '/auth/login/medico' : '/auth/login/paciente';
+        
+        const response = await fetch(API_URL + endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ usuario: usuario })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          mostrarMensagem(data.message, 'sucesso');
+          
+          // Salvar dados do medico na sessionStorage
+          if (perfil === 'medico') {
+            sessionStorage.setItem('medico', JSON.stringify(data.data.medico));
+            sessionStorage.setItem('token', data.data.token);
+            
+            setTimeout(() => {
+              window.location.href = 'pacientes.html?medico_id=' + data.data.medico.id;
+            }, 1000);
+          } else {
+            // Paciente (futuro)
+            sessionStorage.setItem('paciente', JSON.stringify(data.data.paciente));
+            sessionStorage.setItem('token', data.data.token);
+            
+            setTimeout(() => {
+              window.location.href = 'prontuario.html?paciente_id=' + data.data.paciente.id;
+            }, 1000);
+          }
+        } else {
+          mostrarMensagem(data.message, 'erro');
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        mostrarMensagem('Erro de conexao. Verifique se o servidor esta rodando.', 'erro');
+      } finally {
+        botao.disabled = false;
+        botao.textContent = 'Entrar';
       }
     }
+
+    function mostrarMensagem(mensagem, tipo) {
+      const mensagemDiv = document.getElementById('mensagem');
+      mensagemDiv.style.display = 'block';
+      mensagemDiv.textContent = mensagem;
+      
+      if (tipo === 'erro') {
+        mensagemDiv.style.background = '#fff5f5';
+        mensagemDiv.style.color = '#c53030';
+        mensagemDiv.style.border = '1px solid #fed7d7';
+      } else {
+        mensagemDiv.style.background = '#f0fff4';
+        mensagemDiv.style.color = '#2f855a';
+        mensagemDiv.style.border = '1px solid #c6f6d5';
+      }
+    }
+
+    // Permitir entrar com Enter
+    document.getElementById('usuario').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        entrar();
+      }
+    });
   </script>
 </body>
 </html>

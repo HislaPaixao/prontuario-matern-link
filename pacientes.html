@@ -6,37 +6,210 @@
   <link rel="stylesheet" href="style-acesso.css">
 </head>
 <body>
-  <div class="card-acesso" style="max-width: 600px;">
-    <h2>Seus Atendimentos do Dia</h2>
-    <p style="color: #94a3b8; font-size: 14px;">Clique sobre a paciente para iniciar a consulta segura</p>
+  <div class="card-acesso">
+    
+    <div class="header-medico">
+      <div>
+        <h2>Pacientes</h2>
+        <div class="medico-info">
+          Bem-vindo(a), <span class="medico-nome" id="medicoNome">Dr(a).</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <span style="font-size: 12px; color: #718096;" id="dataAtual"></span>
+        <button class="btn-sair" onclick="sair()">Sair</button>
+      </div>
+    </div>
 
-    <table class="tabela-pacientes">
-      <thead>
-        <tr>
-          <th>Nome da Gestante</th>
-          <th>Idade</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr onclick="prosseguir()">
-          <td><strong>Maria Silva Santos</strong></td>
-          <td>28 anos</td>
-          <td style="color: #34d399;">Agendada (14:00)</td>
-        </tr>
-        <tr onclick="alert('Consulta finalizada. Escolha Maria Silva Santos para o teste.')">
-          <td>Ana Oliveira Souza</td>
-          <td>24 anos</td>
-          <td style="color: #94a3b8;">Finalizada</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="estatisticas">
+      <div class="stat-card">
+        <span class="stat-numero" id="totalPacientes">0</span>
+        <span class="stat-label">Total de Pacientes</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-numero" id="consultasHoje">0</span>
+        <span class="stat-label">Consultas Hoje</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-numero" id="totalConsultas">0</span>
+        <span class="stat-label">Total de Consultas</span>
+      </div>
+    </div>
+
+    <div class="barra-busca">
+      <input 
+        type="text" 
+        class="input-busca" 
+        id="buscaPaciente" 
+        placeholder="Buscar paciente por nome..."
+        onkeyup="buscarPacientes()"
+      >
+    </div>
+
+    <div id="listaPacientes">
+      <div class="loading"></div>
+    </div>
+
   </div>
 
   <script>
-    function prosseguir() {
-      window.location.href = "qrcode.html"; // Vai para o scanner
+    const API_URL = 'http://localhost:3000/api';
+    let medicoLogado = null;
+
+    // Inicializacao
+    document.addEventListener('DOMContentLoaded', function() {
+      // Recuperar dados do medico logado
+      const medicoData = sessionStorage.getItem('medico');
+      
+      if (!medicoData) {
+        // Se nao tiver medico na sessao, volta para o login
+        window.location.href = 'login.html';
+        return;
+      }
+
+      medicoLogado = JSON.parse(medicoData);
+      
+      // Atualizar interface
+      document.getElementById('medicoNome').textContent = medicoLogado.nome;
+      document.getElementById('dataAtual').textContent = new Date().toLocaleDateString('pt-BR', {
+        weekday: 'long',
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      });
+      
+      // Carregar dados
+      carregarEstatisticas();
+      carregarPacientes();
+    });
+
+    // Carregar estatisticas
+    async function carregarEstatisticas() {
+      try {
+        const response = await fetch(API_URL + '/pacientes/estatisticas?medico_id=' + medicoLogado.id);
+        const data = await response.json();
+        
+        if (data.success) {
+          document.getElementById('totalPacientes').textContent = data.data.total_pacientes;
+          document.getElementById('consultasHoje').textContent = data.data.consultas_hoje;
+          document.getElementById('totalConsultas').textContent = data.data.total_consultas;
+        }
+      } catch (error) {
+        console.error('Erro ao carregar estatisticas:', error);
+      }
     }
+
+    // Carregar lista de pacientes
+    async function carregarPacientes(busca) {
+      const container = document.getElementById('listaPacientes');
+      
+      try {
+        container.innerHTML = '<div class="loading"></div>';
+        
+        let url = API_URL + '/pacientes?medico_id=' + medicoLogado.id;
+        if (busca) {
+          url += '&busca=' + encodeURIComponent(busca);
+        }
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (!data.success) {
+          container.innerHTML = '<div class="mensagem-vazia">Erro ao carregar pacientes.</div>';
+          return;
+        }
+        
+        const pacientes = data.data;
+        
+        if (pacientes.length === 0) {
+          container.innerHTML = '<div class="mensagem-vazia">Nenhum paciente encontrado.</div>';
+          return;
+        }
+        
+        // Montar tabela
+        let html = `
+          <table class="tabela-pacientes">
+            <thead>
+              <tr>
+                <th>Paciente</th>
+                <th>Idade</th>
+                <th>Gestacao</th>
+                <th>Ultima Consulta</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+        
+        pacientes.forEach(paciente => {
+          const statusClass = paciente.ultima_consulta && 
+            new Date(paciente.ultima_consulta).toDateString() === new Date().toDateString() 
+            ? 'status-agendado' 
+            : 'status-finalizado';
+          
+          const statusTexto = paciente.ultima_consulta && 
+            new Date(paciente.ultima_consulta).toDateString() === new Date().toDateString() 
+            ? 'Hoje' 
+            : 'Aguardando';
+          
+          html += `
+            <tr onclick="selecionarPaciente(${paciente.id}, '${paciente.nome.replace(/'/g, "\\'")}')">
+              <td>
+                <span class="paciente-nome">${paciente.nome}</span>
+                <span class="paciente-detalhes">${paciente.convenio || 'Particular'}</span>
+              </td>
+              <td>${paciente.idade} anos</td>
+              <td>
+                ${paciente.semanas_gestacao ? paciente.semanas_gestacao + ' semanas' : 'N/A'}
+                ${paciente.semanas_gestacao ? '<span class="semanas-badge">' + paciente.semanas_gestacao + 's</span>' : ''}
+              </td>
+              <td>
+                <span class="paciente-detalhes">${paciente.ultima_consulta_formatada}</span>
+              </td>
+              <td>
+                <span class="status-badge ${statusClass}">${statusTexto}</span>
+              </td>
+            </tr>
+          `;
+        });
+        
+        html += '</tbody></table>';
+        container.innerHTML = html;
+        
+      } catch (error) {
+        console.error('Erro ao carregar pacientes:', error);
+        container.innerHTML = '<div class="mensagem-vazia">Erro de conexao com o servidor.</div>';
+      }
+    }
+
+    // Buscar pacientes
+    function buscarPacientes() {
+      const busca = document.getElementById('buscaPaciente').value.trim();
+      carregarPacientes(busca);
+    }
+
+    // Selecionar paciente e ir para o prontuario
+    function selecionarPaciente(pacienteId, pacienteNome) {
+      // Salvar paciente selecionado na sessao
+      sessionStorage.setItem('paciente_id', pacienteId);
+      sessionStorage.setItem('paciente_nome', pacienteNome);
+      
+      // Redirecionar para o prontuario
+      window.location.href = 'index.html?paciente_id=' + pacienteId;
+    }
+
+    // Sair do sistema
+    function sair() {
+      if (confirm('Deseja realmente sair do sistema?')) {
+        sessionStorage.clear();
+        window.location.href = 'login.html';
+      }
+    }
+
+    // Atualizar a cada 30 segundos
+    setInterval(function() {
+      carregarEstatisticas();
+    }, 30000);
   </script>
 </body>
 </html>
