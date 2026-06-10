@@ -61,7 +61,7 @@ CREATE TABLE gestacoes (
 -- ============================================
 -- 4. TABELA DE ALERGIAS
 -- ============================================
-CREATE TABLE alergias (
+CREATE TABLE IF NOT EXISTS alergias (
     id INT AUTO_INCREMENT PRIMARY KEY,
     paciente_id INT NOT NULL,
     substancia VARCHAR(255) NOT NULL,
@@ -130,19 +130,7 @@ CREATE TABLE registros_acompanhamento (
     INDEX idx_registro_paciente (paciente_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
--- 8. TABELA DE ALERGIAS
--- ============================================
-CREATE TABLE IF NOT EXISTS alergias (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    paciente_id INT NOT NULL,
-    substancia VARCHAR(255) NOT NULL,
-    gravidade VARCHAR(20) DEFAULT 'moderada',
-    observacoes TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (paciente_id) REFERENCES pacientes(id) ON DELETE CASCADE,
-    INDEX idx_alergia_paciente (paciente_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 
 -- ============================================
