@@ -21,6 +21,20 @@ CREATE TABLE IF NOT EXISTS consultas (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS registros_acompanhamento (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    paciente_id INT NOT NULL DEFAULT 1,
+    consulta_id INT NULL,
+    tipo VARCHAR(20) NOT NULL,
+    nome VARCHAR(255) NOT NULL,
+    descricao TEXT,
+    arquivo_url VARCHAR(500),
+    tamanho_bytes BIGINT,
+    formato VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (consulta_id) REFERENCES consultas(id) ON DELETE SET NULL
+);
+
 -- Inserir consultas de exemplo
 INSERT INTO consultas (data_consulta, queixa_principal, exame_fisico, conduta, status) VALUES
 ('2024-03-15 14:30:00', 

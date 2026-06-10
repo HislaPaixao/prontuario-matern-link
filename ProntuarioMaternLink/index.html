@@ -753,6 +753,59 @@
         alert("✅ Atendimento finalizado com sucesso! Prontuário bloqueado para edições.");
         fecharModal();
     }
+
+    // Funcao para upload de audio
+async function uploadAudio(audioBlob) {
+    const formData = new FormData();
+    formData.append('audio', audioBlob, 'gravacao.webm');
+    formData.append('paciente_id', '1');
+    
+    try {
+        const response = await fetch(API_URL + '/registros/audio', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            mostrarPopup('Audio salvo com sucesso!', 'sucesso');
+            carregarRegistros();
+        } else {
+            mostrarPopup(data.message, 'erro');
+        }
+    } catch (error) {
+        mostrarPopup('Erro ao enviar audio', 'erro');
+    }
+}
+
+// Funcao para upload de documentos
+async function uploadDocumentos(files) {
+    const formData = new FormData();
+    
+    for (let file of files) {
+        formData.append('documentos', file);
+    }
+    formData.append('paciente_id', '1');
+    
+    try {
+        const response = await fetch(API_URL + '/registros/documento', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            mostrarPopup(data.message, 'sucesso');
+            carregarRegistros();
+        } else {
+            mostrarPopup(data.message, 'erro');
+        }
+    } catch (error) {
+        mostrarPopup('Erro ao enviar documentos', 'erro');
+    }
+}
   </script>
 </body>
 </html>
