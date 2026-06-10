@@ -9,6 +9,7 @@ Projeto de implementação de um prontuário médico para e empresa Matern Link 
 - Navegador web
 
 # Para iniciar o banco de dados faça:
+- modificar a senha do banco em "backend/config/database.js"
 - iniciar o banco de de dados em "backend/initDB.sql"
 
 # Para iniciar o back-end abra o terminal de comandos (CMD) e digite em ordem:
