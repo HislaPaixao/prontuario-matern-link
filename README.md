@@ -25,3 +25,6 @@ Projeto de implementação de um prontuário médico para e empresa Matern Link 
 - CRM: 123456 | Email: carlos.eduardo@maternlink.com
 - CRM: 789012 | Email: ana.paula@maternlink.com
 - CRM: 345678 | Email: ricardo.mendes@maternlink.com
+
+# Link do Pitch em Vídeo sobre o sistema:
+https://drive.google.com/file/d/16iBEhhDWgBrnlkQKJ3M1ReQvGFnpBF8g/view?usp=sharing
